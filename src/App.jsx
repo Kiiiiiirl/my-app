@@ -68,13 +68,16 @@ function App() {
         score: 100
       });
       */
+      var key = document.getElementById("keyD").value;
+      var value = document.getElementById("valD").value;
 
-      
+      console.log(key);console.log(value);
+
+      let dict = {}
+      dict[key]= value;
+
       await updateDoc(
-        doc(db, "users", auth.currentUser.uid),
-        {
-          favoriteFood: "Pizza"
-        }
+        doc(db, "users", auth.currentUser.uid),dict
       );
       
 
@@ -102,10 +105,6 @@ function App() {
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <button onClick={signup}>
-          Sign Up
-        </button>
-
         <button onClick={login}>
           Login
         </button>
@@ -115,10 +114,11 @@ function App() {
         </button>
 
       </div>
+      <br />
 
       <div>
-        <input type="text" size={4} placeholder='key'/>
-        <input type="text" size={15} placeholder='value'/>
+        <input type="text" id='keyD' size={4} placeholder='key'/>
+        <input type="text" id='valD' size={15} placeholder='value'/>
       </div>
 
       <br />
