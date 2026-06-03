@@ -1,0 +1,29 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.137);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup {
+  background: rgb(184, 221, 255);
+  padding: 20px;
+  border-radius: 8px;
+  min-width: 300px;
+  z-index: 1000;
+}
+.popup2 {
+  background: rgb(255, 204, 255);
+  padding: 20px;
+  border-radius: 8px;
+  min-width: 400px;
+}
+.popup3 {
+  background: rgb(204, 255, 231);
+  padding: 20px;
+  border-radius: 8px;
+  min-width: 500px;
+}

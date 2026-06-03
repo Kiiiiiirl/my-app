@@ -1,4 +1,6 @@
 import {useRef,useState, useEffect } from "react";
+import '../styles/test.css'
+
 
 /*
 export default function App() {
@@ -100,7 +102,7 @@ export default function App() {
   );
 }
 */
-
+/*
 export default function App() {
   const counterRef = useRef(0);
   const [renderCount, setRenderCount] = useState(0);
@@ -134,4 +136,48 @@ export default function App() {
       <div className="testBox">aaaaaaaaaaaa</div>
     </div>
   );
+} */
+
+
+import {Test,OkPopup,TextPopup,OptionPopup} from "./functions-test.jsx";
+
+
+export default function App() {
+  const [showPopup, setShowPopup] = useState(false);
+  const [showTextPopup, setShowTextPopup] = useState(false);
+  const [showOptionPopup, setShowOptionPopup] = useState(false);
+
+  function popo1(){setShowPopup(prev=>!prev);}
+  function popo2(){setShowTextPopup(prev=>!prev);}
+  function popo3(){setShowOptionPopup(prev=>!prev);}
+  function popoALL(){setShowPopup(prev=>!prev);setShowTextPopup(prev=>!prev);setShowOptionPopup(prev=>!prev);}
+
+
+  return (
+    <>
+      <button onClick={popo1}>OkPopup</button><br /><br />
+      <button onClick={popo2}>TextPopup</button><br /><br />
+      <button onClick={popo3}>OptionPopup</button><br /><br />
+      <button onClick={popoALL}>ALL</button>
+
+
+      <OptionPopup
+        isOpen={showOptionPopup}
+        options={["Easy", "Medium", "Hard"]}
+        onSubmit={(value) => console.log(value)}
+        onClose={() => setShowOptionPopup(false)}
+      />
+     <TextPopup
+        isOpen={showTextPopup}
+        onClose={() => setShowTextPopup(false)}
+        onSubmit={(value) => console.log(value)}
+      /> 
+      <OkPopup
+        isOpen={showPopup}
+        onClose={() => setShowPopup(false)}
+        message="Data saved successfully!"
+      />      
+    </>
+  )
+
 }

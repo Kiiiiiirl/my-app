@@ -2,11 +2,11 @@ import { useState, useRef, useEffect} from 'react'
 import { db,auth } from "./firebase";
 
 import './styles/App.css'
-import './styles/index.css'
 import './styles/navbar.css'
 import './styles/sidebar.css'
 import plus from './assets/circle-plus-filled-svgrepo-com.svg'
 import trash from './assets/trash-circle-fill-svgrepo-com.svg'
+import trash2 from './assets/trash-can-solid-full.svg'
 
 import {createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut} from "firebase/auth";
 import {collection,addDoc,getDoc,doc, setDoc,updateDoc } from "firebase/firestore";
@@ -15,7 +15,7 @@ function App() {
   // ================LOGIN AND LOGOUT===============================
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  
   var [isLoggedIn, setIsLoggedIn] = useState(false);
 
   var [userDATA, setUD] = useState({});
@@ -107,10 +107,7 @@ function App() {
 
   // ================Tree Hierarchy App===============================
   const [sidebarOpen, setSidebarOpen] = useState(false);
-
-  function toggleSidebar() {
-    setSidebarOpen(prev => !prev);
-  }
+  function toggleSidebar() {setSidebarOpen(prev => !prev);}
 
   const TireOptions = ['DLM','TA','ELO','TI','GRL','LDD','HPT','SA','WSA'];
   const sizeOptions = [80,85,90,94,215];
@@ -232,12 +229,6 @@ function App() {
   function handleDateChange(e) {
     setDValue(e.target.value);
   }
-  function saveTest(){
-    console.log('saveTEst')
-    const testDict = {};
-    testDict[today] = lines;
-    console.log(testDict);
-  }
 
   var [isVisible, setIsVisible] = useState(false);
 
@@ -249,19 +240,29 @@ function App() {
     setLaines(prev => userDATA[v])
   }
 
+  function Tash(){
+    console.log('tash');
+  }
+
+  let [testText, setTestText] = useState("mcDIgnlushPlingushl");
+  function popupInput(){
+    let r= prompt("Please enter ANYTHING \n I BEG YUU", "");
+    setTestText(r);
+  }
+
+
   return (
     <>
     <nav className="">
       <div id="container-fluid">
-        <a id="navbar-brand" href="#">Cuenta llantas {isVisible && <span>pukiii ;3</span>}</a>
+        <a id="navbar-brand" href="#">Cuenta llantas {isVisible && <span>pukiiii ;3</span>}</a>
 
         <button className="" id="menu-toggle" onClick={toggleSidebar}>☰</button>
       </div>
     </nav>
 
     <div id="sidebar" className={sidebarOpen ? "sidebar active" : "sidebar"}>
-     <br/>
-     <div>
+     <div id="sidebar-container">
         {isLoggedIn ? 
         <>
           <input name='oldSave' type="date" id="date" ref={inputRef} value={dvalue} /*defaultValue={today}*/ onChange={handleDateChange}/>
@@ -277,16 +278,19 @@ function App() {
           <br/>
           <button onClick={login} className="BigB">Login</button>
         </> }
-      </div>
-      {/*<div><input type="text" id='keyD' size={4} placeholder='key'/><input type="text" id='valD' size={15} placeholder='value'/></div>*/}
-      <div>
+      <div className='folderContainer'>
         {Object.keys(userDATA).map((key) => (
-          <div key={`${key}`} data-value={`${key}`} className='sidebar-option' onClick={(e)=>loadPaper(e.currentTarget.dataset.value)}>{key}</div>
+          <div key={`${key}`} data-value={`${key}`} className='sidebar-option' onClick={(e)=>loadPaper(e.currentTarget.dataset.value)}>
+            <div>{key}</div>
+            <button onClick={Tash}><img className='button-line' src={trash2} alt="" className='iconn2' /></button>
+          </div>
         ))}
       </div>
+      </div>
+
     </div>
 
-    <div id="content" className={sidebarOpen ? "sidebar active" : "sidebar"}>
+    <div id="content">
       <div id="container">
         <br/>
         {Object.entries(lines).map((children) => (
@@ -324,6 +328,8 @@ function App() {
       <br/> 
       {isVisible && <p>SEXCO</p>}   
       <button onClick={FLIP}>VISIBLEE</button>
+      <p>{testText}</p>
+      <button onClick={popupInput}>Try it</button>
     </div>
   <div>
 </div>
