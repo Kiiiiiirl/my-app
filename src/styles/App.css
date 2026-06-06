@@ -3,6 +3,7 @@ html, body {
 }
 html{
   padding: 0;
+  padding-top: 5rem;
   font-size: 1.25rem;
   font-family: Arial, sans-serif;
   font-weight: 400;
@@ -25,7 +26,6 @@ html{
 #content {
   transition: margin-left 0.3s;
   padding: 0;
-  margin-top: 5rem;
 }
 /*#content.shift {margin-right: 60vw;}*/
 body {
@@ -112,6 +112,19 @@ input:focus::placeholder {opacity: 0.5;;}
 .BigB:hover{background-color: #ccc;}
 .BigB:active{background-color: #8b8b8b;}
 .mathBtn{margin: 5px;height: 80px;}
+.midBtn{
+  border-radius: 8%;
+  color: black;
+  font-size: 1.4rem;
+  margin-left: 10px;
+  margin:0px 10px ;
+  padding: 15px;
+  margin: 20px 10px;
+}
+.midBtn:hover{background-color: #ccc;}
+.midBtn:active{background-color: #8b8b8b;}
+
+
 
 @media (max-width: 768px) {
   html {
@@ -143,5 +156,24 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .folderContainer{
   border-top: 2px solid #f7f5ff69;
+}
 
+.login-prompt{
+  font-size: 2rem;
+  height: 80vh;
+  
+  background: transparent;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.Settings{
+  background: rgb(29, 28, 29);
+  border: 1px solid white;
+  padding: 20px;
+  border-radius: 8px;
+  min-height: 60vh;
+  min-width: 50vw;
 }

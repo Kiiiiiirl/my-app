@@ -19,10 +19,6 @@ export default function App() {
   // const [value, setValue] = useState(initialValue)
 
   const [count, setCount] = useState(0);
-
-  // useRef
-  // useRef stores a value WITHOUT re-rendering the component
-  // Also commonly used to access HTML elements directly
   const inputRef = useRef(null);
 
   // useEffect

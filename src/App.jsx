@@ -4,12 +4,15 @@ import { db,auth } from "./firebase";
 import './styles/App.css'
 import './styles/navbar.css'
 import './styles/sidebar.css'
+import './styles/components.css'
 import plus from './assets/circle-plus-filled-svgrepo-com.svg'
 import trash from './assets/trash-circle-fill-svgrepo-com.svg'
 import trash2 from './assets/trash-can-solid-full.svg'
 
 import {createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut} from "firebase/auth";
 import {collection,addDoc,getDoc,doc, setDoc,updateDoc } from "firebase/firestore";
+
+import {Test,OkPopup,TextPopup,OptionPopup} from "./components/popup-components.jsx";
 
 function App() {
   // ================LOGIN AND LOGOUT===============================
@@ -18,7 +21,9 @@ function App() {
   
   var [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  var [userDATA, setUD] = useState({});
+  var [userDATA, setUiserData] = useState({});
+  var [disenoData, setDienoData] = useState(['DLM']);
+
 
   async function signup() {
     try {
@@ -67,10 +72,9 @@ function App() {
 
     const snapshot = await getDoc(userRef);
 
-    setUD(snapshot.data().AppData)
-
     if (snapshot.exists()) {
-      Object.keys(userDATA).map(key => {console.log(key)});
+      setUiserData(snapshot.data().AppData)
+      setDienoData(snapshot.data().diseno)
     } else {
       console.log("No data found");
     }
@@ -104,12 +108,24 @@ function App() {
       console.error(err);
     }
   }
+  async function updateDiseno(){
+    try {
+      await updateDoc(
+        doc(db, "users", auth.currentUser.uid),
+        {
+          ['diseno']: disenoData
+        }
+      );
+      console.log("Updated disenos!");
+    } catch (err) {
+      console.error(err);
+    }
+  }
 
   // ================Tree Hierarchy App===============================
   const [sidebarOpen, setSidebarOpen] = useState(false);
   function toggleSidebar() {setSidebarOpen(prev => !prev);}
 
-  const TireOptions = ['DLM','TA','ELO','TI','GRL','LDD','HPT','SA','WSA'];
   const sizeOptions = [80,85,90,94,215];
 
   const today = new Date().toISOString().split("T")[0];
@@ -218,11 +234,11 @@ function App() {
   //============TIMES RENDERED============================
   //const count = useRef(0);
   useEffect(() => {
+    updateDiseno();
     //count.current = count.current + 1;
     //console.log('RENDERED'/*, count.current*/);
     //console.log(lines);
-    //console.log(userDATA);
-  });//Runs on every render
+  },[disenoData]);//Runs on every render
 
   //============ SAVE ============================
   const [dvalue, setDValue] = useState(today);
@@ -250,9 +266,29 @@ function App() {
     setTestText(r);
   }
 
+  //================================ POPUPS ==================================
+  const [showSettings, setshouwSettings] = useState(false);
+  const [setti, setSetti] = useState("Display");
+  const agregarInptRef = useRef(null);
+  const borrarInptRef = useRef(null);
+
+
+  const [showPopup, setShowPopup] = useState(false);
+  const [showTextPopup, setShowTextPopup] = useState(false);
+  const [showOptionPopup, setShowOptionPopup] = useState(false);
+
+  function popSet(){setshouwSettings(prev=>!prev);}
+  function popo1(){setShowPopup(prev=>!prev);}
+  function popo2(){setShowTextPopup(prev=>!prev);}
+  function popo3(){setShowOptionPopup(prev=>!prev);}
+  function popoALL(){setShowPopup(prev=>!prev);setShowTextPopup(prev=>!prev);setShowOptionPopup(prev=>!prev);}
+
+
+
 
   return (
     <>
+
     <nav className="">
       <div id="container-fluid">
         <a id="navbar-brand" href="#">Cuenta llantas {isVisible && <span>pukiiii ;3</span>}</a>
@@ -260,21 +296,22 @@ function App() {
         <button className="" id="menu-toggle" onClick={toggleSidebar}>☰</button>
       </div>
     </nav>
-
     <div id="sidebar" className={sidebarOpen ? "sidebar active" : "sidebar"}>
      <div id="sidebar-container">
         {isLoggedIn ? 
         <>
-          <input name='oldSave' type="date" id="date" ref={inputRef} value={dvalue} /*defaultValue={today}*/ onChange={handleDateChange}/>
-          <button id="saveBtn" className="BigB" title="Guardar los datos" onClick={saveData}>Save Dataa</button>
+          <input type="date" id="date" ref={inputRef} value={dvalue} onChange={handleDateChange}/>
+          <button id="saveBtn" className="BigB" title="Guardar los datos" onClick={saveData}>Save Dataa 💾</button>
           <br/>
-          <button onClick={logout} className="BigB">Logout</button>
-          <div></div>
+          <button onClick={popSet} className="BigB">⚙ Settings </button><br/>
+          <button onClick={logout} className="midBtn">Logout</button>
+
+
         </>
         : 
         <>
-          <input type="email" placeholder="Email" id="email" autoComplete="on" onChange={(e) => setEmail(e.target.value)} defaultValue={""}/>
-          <input type="password" placeholder="Password" id="password" onChange={(e) => setPassword(e.target.value)}/>
+          <input type="email" placeholder="Email" id="email" autoComplete="on" value={email} onChange={(e) => setEmail(e.target.value)}/>
+          <input type="password" placeholder="Password" id="password" value={password} onChange={(e) => setPassword(e.target.value)}/>
           <br/>
           <button onClick={login} className="BigB">Login</button>
         </> }
@@ -289,10 +326,9 @@ function App() {
       </div>
 
     </div>
-
+    {isLoggedIn ? <>
     <div id="content">
       <div id="container">
-        <br/>
         {Object.entries(lines).map((children) => (
           <div className="line-container" key={`c${children[0]}`}>
             <div className='line-line'>
@@ -304,7 +340,7 @@ function App() {
               {Object.entries(children[1]['details']).map((child) => (
                 <div key={`${children[0]}${child[0]}`} className='info-container'>
                   <select name="" id={`s${children[0]}${child[0]}`} onChange={(e)=>handleChangeD(children[0],child[0],e.target.value)}>
-                    {TireOptions.map((TiOP, index) => (
+                    {disenoData.map((TiOP, index) => (
                       <option key={`${index}${child[0]}${TiOP}`}>{TiOP}</option>
                     ))};
                   </select>
@@ -325,14 +361,89 @@ function App() {
       <br/>
       <button id="newBtn" className="BigB" title="Crear un cliente nuevo" onClick={addLine}>New</button>
       <button id="delBtn" className="BigB" title="Borrar el ultimo cliente creado" onClick={deleteLine}>Delete</button>
+      
       <br/> 
-      {isVisible && <p>SEXCO</p>}   
       <button onClick={FLIP}>VISIBLEE</button>
-      <p>{testText}</p>
-      <button onClick={popupInput}>Try it</button>
+
     </div>
-  <div>
-</div>
+    </> : <div className="login-prompt">Click on the Hamburger Icon "☰" first and log in </div> }
+ 
+      {showSettings && 
+      <div className="overlay">
+        <div className="Settings">
+          <h1>Settings</h1>
+          {
+            setti === "agregar" ? 
+            <>
+            <h2>Agregar</h2>
+            <input ref={agregarInptRef} type="text" name="" id="" placeholder='diseño...'/>
+            <button onClick={() => {
+              let ee =  agregarInptRef.current.value;
+              setDienoData(prev=>[...prev,ee]);
+              setSetti("Display");
+              setshouwSettings(false);
+              }}>Aceptar</button>
+            <br/><br/><br/><button onClick={() => setSetti("Display")}>volver</button>
+            </>
+            
+            : setti === "borrar" ?             
+            <>
+            <h2>Borrar</h2>
+            <select ref={borrarInptRef} name="" id="">
+              {disenoData.map((value, index) => (
+                <option key={`Sett${index}${value}`}>{value}</option>
+              ))};
+            </select>
+            <button onClick={() => {
+              let ee =  borrarInptRef.current.value;
+              console.log(disenoData);
+              console.log(disenoData.filter(dise=>dise!=ee));
+              setDienoData(prev => (prev.filter(dise=>dise!=ee)));
+              setSetti("Display");
+              setshouwSettings(false);
+              }}>Aceptar</button>
+            <br/><br/><br/><button onClick={() => setSetti("Display")}>volver</button>
+            </>
+            :
+            <>
+              <div>
+                <div  style={{fontSize: "1.6rem"}}>Diseño</div>
+                <button className="midBtn" onClick={() => setSetti("agregar")}>Agregar</button>
+                <button className="midBtn" onClick={() => setSetti("borrar")}>Borrar</button>
+              </div>
+              
+              <br/><br/><br/><button onClick={() => setshouwSettings(false)}>volver</button>
+            </>
+          }
+
+        </div>
+      </div>}   
+
+{isVisible && 
+<>       
+<p>SEXCO</p>
+<p>{testText}</p>
+<button onClick={popupInput}>Try it</button>
+<button onClick={popo1}>OkPopup</button><button onClick={popo2}>TextPopup</button><button onClick={popo3}>OptionPopup</button><button onClick={popoALL}>ALL</button>
+
+       <OptionPopup
+         isOpen={showOptionPopup}
+         options={["Easy", "Medium", "Hard"]}
+         onSubmit={(value) => console.log(value)}
+         onClose={() => setShowOptionPopup(false)}
+       />
+      <TextPopup
+         isOpen={showTextPopup}
+         onClose={() => setShowTextPopup(false)}
+         onSubmit={(value) => console.log(value)}
+       /> 
+       <OkPopup
+         isOpen={showPopup}
+         onClose={() => setShowPopup(false)}
+         message="Data saved successfully!"
+       />  
+</>}   
+
   </>
   );
 }
