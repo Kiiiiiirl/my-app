@@ -339,12 +339,12 @@ function App() {
             <div>
               {Object.entries(children[1]['details']).map((child) => (
                 <div key={`${children[0]}${child[0]}`} className='info-container'>
-                  <select name="" id={`s${children[0]}${child[0]}`} onChange={(e)=>handleChangeD(children[0],child[0],e.target.value)}>
+                  <select name="" id={`s${children[0]}${child[0]}`} onChange={(e)=>handleChangeD(children[0],child[0],e.target.value)} value={child[1].diseno}>
                     {disenoData.map((TiOP, index) => (
                       <option key={`${index}${child[0]}${TiOP}`}>{TiOP}</option>
                     ))};
                   </select>
-                  <select name="" id={`z${children[0]}${child[0]}`} onChange={(e)=>handleChangeM(children[0],child[0],e.target.value)}>
+                  <select name="" id={`z${children[0]}${child[0]}`} onChange={(e)=>handleChangeM(children[0],child[0],e.target.value)} value={child[1].medida}>
                     {sizeOptions.map((siOP, index) => (
                       <option key={`${index}${child[0]}${siOP}`}>{siOP}</option>
                     ))};
