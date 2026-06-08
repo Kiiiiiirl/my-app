@@ -304,25 +304,19 @@ function App() {
           <button id="saveBtn" className="BigB" title="Guardar los datos" onClick={saveData}>Save Dataa 💾</button>
           <br/>
           <button onClick={popSet} className="BigB">⚙ Settings </button><br/>
-          <button onClick={logout} className="midBtn">Logout</button>
-
-
+          <div className='folderContainer'>
+            {Object.keys(userDATA).map((key) => (
+              <div key={`${key}`} data-value={`${key}`} className='sidebar-option' onClick={(e)=>loadPaper(e.currentTarget.dataset.value)}>
+                <div>{key}</div>
+                <button onClick={Tash}><img className='button-line' src={trash2} alt="" className='iconn2' /></button>
+              </div>
+            ))}
+        </div>
         </>
         : 
         <>
-          <input type="email" placeholder="Email" id="email" autoComplete="on" value={email} onChange={(e) => setEmail(e.target.value)}/>
-          <input type="password" placeholder="Password" id="password" value={password} onChange={(e) => setPassword(e.target.value)}/>
-          <br/>
-          <button onClick={login} className="BigB">Login</button>
+          <h1>Log in first</h1>
         </> }
-      <div className='folderContainer'>
-        {Object.keys(userDATA).map((key) => (
-          <div key={`${key}`} data-value={`${key}`} className='sidebar-option' onClick={(e)=>loadPaper(e.currentTarget.dataset.value)}>
-            <div>{key}</div>
-            <button onClick={Tash}><img className='button-line' src={trash2} alt="" className='iconn2' /></button>
-          </div>
-        ))}
-      </div>
       </div>
 
     </div>
@@ -366,7 +360,14 @@ function App() {
       <button onClick={FLIP}>VISIBLEE</button>
 
     </div>
-    </> : <div className="login-prompt">Click on the Hamburger Icon "☰" first and log in </div> }
+    </> : 
+    <div>
+      <h2>Login</h2>
+      <input type="email" placeholder="Email" id="email" autoComplete="on" value={email} onChange={(e) => setEmail(e.target.value)}/>
+      <input type="password" placeholder="Password" id="password" value={password} onChange={(e) => setPassword(e.target.value)}/>
+      <br />
+      <button onClick={login} className="BigB">Login</button>
+    </div> }
  
       {showSettings && 
       <div className="overlay">
@@ -383,7 +384,8 @@ function App() {
               setSetti("Display");
               setshouwSettings(false);
               }}>Aceptar</button>
-            <br/><br/><br/><button onClick={() => setSetti("Display")}>volver</button>
+            <br/><br/><br/>
+            <button className="midBtn" onClick={() => setSetti("Display")}>volver</button>
             </>
             
             : setti === "borrar" ?             
@@ -402,7 +404,8 @@ function App() {
               setSetti("Display");
               setshouwSettings(false);
               }}>Aceptar</button>
-            <br/><br/><br/><button onClick={() => setSetti("Display")}>volver</button>
+            <br/><br/><br/>
+            <button className="midBtn" onClick={() => setSetti("Display")}>volver</button>
             </>
             :
             <>
@@ -411,8 +414,14 @@ function App() {
                 <button className="midBtn" onClick={() => setSetti("agregar")}>Agregar</button>
                 <button className="midBtn" onClick={() => setSetti("borrar")}>Borrar</button>
               </div>
+              <br />
+              <div>
+                <div  style={{fontSize: "1.6rem"}}>Log Out</div>
+                <button className="midBtn"  onClick={logout} >Log Out</button>
+              </div>
               
-              <br/><br/><br/><button onClick={() => setshouwSettings(false)}>volver</button>
+              <br/><br/><br/>
+              <button className="midBtn" onClick={() => setshouwSettings(false)}>volver</button>
             </>
           }
 
